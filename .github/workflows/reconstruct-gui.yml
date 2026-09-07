@@ -1,0 +1,40 @@
+name: Reconstruct staged MATLAB GUI
+
+on:
+  push:
+    paths:
+      - '.tmp_source/**'
+      - '.github/workflows/reconstruct-gui.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconstruct:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and verify MATLAB source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .tmp_source/gui_part_*.b64 | base64 --decode > Delsys_HPF_Converter_QC_GUI.m
+          actual="$(git hash-object Delsys_HPF_Converter_QC_GUI.m)"
+          expected="ddb7c0ccb13628b92df507042818dafdd3eb7fcb"
+          echo "Expected blob: $expected"
+          echo "Actual blob:   $actual"
+          test "$actual" = "$expected"
+
+      - name: Commit verified source and remove staging files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .tmp_source
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Delsys_HPF_Converter_QC_GUI.m .tmp_source
+          git commit -m "Add verified MATLAB GUI source"
+          git push
