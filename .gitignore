@@ -1,0 +1,22 @@
+# Generated MATLAB files
+*.asv
+*.m~
+*.autosave
+
+# MATLAB project/user state
+*.prj.user
+slprj/
+codegen/
+
+# Research data and Delsys source data
+*.hpf
+
+# Generated converter outputs
+*_EMG.txt
+*_ACC.txt
+*_ConversionMetadata.txt
+QC_Reports/
+
+# OS files
+.DS_Store
+Thumbs.db

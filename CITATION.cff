@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using this metadata. Questions: vinay@tfaworld.org"
+title: "Delsys HPF Converter + QC"
+type: software
+authors:
+  - family-names: "Shankar"
+    given-names: "Vinay"
+    email: "vinay@tfaworld.org"
+version: "1.1.0"
+date-released: "2026-09-07"
+url: "https://tfaworld.org/"
+abstract: "A study-agnostic MATLAB GUI by Vinay Shankar for Delsys HPF discovery, configurable stream-level quality control, reusable sensor configurations, and separate EMG/accelerometer export. Contact: vinay@tfaworld.org."
