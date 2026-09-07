@@ -1,17 +1,17 @@
 # Delsys HPF Converter + QC
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**Version:** 1.1.0  
 **Author:** Vinay Shankar  
 **Email:** vinay@tfaworld.org  
-**Website:** https://tfaworld.org/  
-**Version:** 1.1.0
+**Website:** https://tfaworld.org/
 
 A study-agnostic MATLAB GUI for discovering, quality-checking, configuring, and converting Delsys EMGworks `.hpf` recordings into separate EMG and accelerometer text files.
 
-Developed and maintained by **Vinay Shankar**. For questions, bug reports, or research-use discussion, contact **vinay@tfaworld.org** or visit **https://tfaworld.org/**.
-
 ## Why this project exists
 
-Delsys HPF datasets can become difficult to process when a study contains multiple acquisition layouts, differently nested folders, inconsistent filenames, EMG-only sensors, accelerometer-only sensors, or sensors that record both EMG and 3-axis acceleration. A conversion script that hard-codes one experiment can silently assign the wrong anatomical labels to another recording.
+Delsys HPF datasets can become difficult to process when a study contains multiple acquisition layouts, nested folders, inconsistent filenames, EMG-only sensors, accelerometer-only sensors, or sensors that record both EMG and 3-axis acceleration. A conversion script that hard-codes one experiment can silently assign the wrong labels to another recording.
 
 This application separates the workflow into four explicit steps:
 
@@ -20,60 +20,52 @@ This application separates the workflow into four explicit steps:
 3. **QC** every HPF stream by observed sampling rate and expected stream order.
 4. **Convert** only recordings that pass QC, without modifying or overwriting source data.
 
-The software is intentionally generic. Study names, task names, muscle names, folder structures, and file keywords live in user-created configuration files rather than in the application code.
+Study names, task names, muscle names, folder structures, and file keywords live in user-created configuration files rather than in the application code.
 
 ## Main features
 
-- Recursive or single-folder `.hpf` discovery.
-- Filename include/exclude keyword filters.
-- Folder/path include/exclude keyword filters.
-- `Match ANY` or `Match ALL` filename rules.
-- Up to **16 ordered sensor definitions**.
-- Sensor modes: `Ignore`, `EMG only`, `ACC only`, `EMG + ACC`.
-- User-defined expected EMG and ACC sampling frequencies and tolerances.
-- Stream-by-stream QC comparing observed signal type with configured stream order.
-- Optional deep QC that reads stream data and checks for zero-length or unequal-length signals.
-- Reusable MATLAB `.mat` configuration profiles.
-- Separate tab-delimited EMG and ACC outputs.
-- Time columns generated from observed sampling rates.
-- Timestamped QC summary and stream-audit CSV reports.
-- Conversion metadata sidecars for provenance and reproducibility.
-- Preserved source-folder structure when desired.
-- Output-tree exclusion during recursive scans.
-- Existing output files are **never overwritten**.
-- Author, email, website, software version, and provenance recorded throughout generated configuration/QC/metadata products.
+- Recursive or single-folder `.hpf` discovery
+- Filename and path include/exclude filters
+- `Match ANY` or `Match ALL` filename rules
+- Up to 16 ordered sensor definitions
+- Sensor modes: `Ignore`, `EMG only`, `ACC only`, `EMG + ACC`
+- User-defined EMG/ACC sampling frequencies and tolerances
+- Stream-by-stream QC against the configured stream order
+- Optional deep QC for empty or unequal-length signals
+- Reusable MATLAB `.mat` configuration profiles
+- Separate tab-delimited EMG and ACC outputs
+- Time columns generated from observed sampling rates
+- Timestamped QC summary and stream-audit CSV reports
+- Conversion metadata sidecars for provenance and reproducibility
+- Optional preservation of source-folder structure
+- Output-tree exclusion during recursive scans
+- Existing output files are never overwritten
 
-## Software requirements
+## Requirements
 
-### Required
+- **Windows**
+- **MATLAB** with `uifigure` and .NET support
+- **Delsys EMGworks / MATLAB Conversion Library** containing `HPF.dll`
+- Read access to source `.hpf` recordings
+- Write access to a separate output directory
 
-- **Windows**. The application loads the Delsys `HPF.dll` through MATLAB's .NET interface; the distributed Delsys conversion library is Windows-based.
-- **MATLAB** with `uifigure` UI components and .NET support. A current MATLAB release is recommended.
-- **Delsys EMGworks / MATLAB Conversion Library** containing `HPF.dll`.
-- Read access to the source `.hpf` recordings.
-- Write access to a separate output directory.
-
-### Not required by this application
-
-- Signal Processing Toolbox is not required for the current conversion/QC workflow.
-- App Designer is not required; the GUI is a single `.m` file.
-- The Delsys `HPF.dll` is **not** included in this repository.
-
-The GUI starts with this common Windows installation path as an editable default:
+The Delsys `HPF.dll` is **not distributed in this repository**. A common installation path is:
 
 ```text
 C:\Program Files (x86)\Delsys, Inc\EMGworks\Matlab Conversion Library\HPF.dll
 ```
 
-Your installation may differ. Use **Browse...** in the GUI to select the correct DLL.
+Your installation may differ. Use the GUI's **Browse...** control to select the correct library.
 
-See [Installation](docs/INSTALLATION.md) for a complete setup guide.
+Signal Processing Toolbox and App Designer are not required for the current workflow.
+
+See [Installation](docs/INSTALLATION.md) for detailed setup.
 
 ## Quick start
 
-1. Download or clone this repository.
-2. Open MATLAB on the Windows computer that has the Delsys conversion library installed.
-3. Make this repository the current MATLAB folder or add it to the MATLAB path.
+1. Clone or download this repository.
+2. Open MATLAB on the Windows computer with the Delsys conversion library installed.
+3. Make the repository the current MATLAB folder or add it to the MATLAB path.
 4. Run:
 
 ```matlab
@@ -81,14 +73,14 @@ Delsys_HPF_Converter_QC_GUI
 ```
 
 5. Select `HPF.dll`.
-6. Select an **input root folder** containing your HPF recordings.
-7. Select a **different output root folder**.
-8. Enter optional filename/folder filters.
-9. Enter expected EMG/ACC sample rates and tolerances.
+6. Choose the input root containing HPF recordings.
+7. Choose a different output root.
+8. Configure filename/folder filters as needed.
+9. Set expected EMG/ACC sample rates and tolerances.
 10. Build the ordered channel map.
 11. Click **Scan Files**.
 12. Click **Run QC**.
-13. Inspect failures and stream-level audits.
+13. Inspect failures and stream audits.
 14. Click **Convert Passed** only after confirming the configuration is correct.
 
 See [Getting Started](docs/GETTING_STARTED.md) for a guided first run.
@@ -104,7 +96,7 @@ Each row represents one physical sensor in its expected HPF order.
 | `ACC only` | 3 ACC streams: X, Y, Z |
 | `EMG + ACC` | 1 EMG stream followed by ACC X, Y, Z |
 
-For example, this configuration:
+Example configuration:
 
 | Order | Label | Sensor Type |
 |---:|---|---|
@@ -112,7 +104,7 @@ For example, this configuration:
 | 2 | LeftMuscle | EMG + ACC |
 | 3 | RightMuscle | EMG + ACC |
 
-expects the stream sequence:
+Expected stream sequence:
 
 ```text
 HeadX, HeadY, HeadZ,
@@ -122,73 +114,53 @@ RightMuscle EMG, RightMuscleX, RightMuscleY, RightMuscleZ
 
 ### Critical interpretation rule
 
-**Sampling-rate QC can help establish whether a stream behaves like EMG or ACC. It cannot independently prove the anatomical identity of that sensor.**
+**Sampling-rate QC can help establish whether a stream behaves like EMG or ACC. It cannot independently prove the anatomical identity of the sensor.**
 
-If a configuration says stream 4 belongs to `LeftMuscle`, the software can verify that stream 4 has the expected EMG-like sampling rate, but the anatomical label is only correct if the user has entered the acquisition order correctly. Always validate the channel map against the Delsys acquisition setup used during collection.
-
-See [Configuration Reference](docs/CONFIGURATION_REFERENCE.md) and [QC & Validation](docs/QC_AND_VALIDATION.md).
+A PASS means the file is consistent with the **configuration supplied by the user**. It does not prove electrode placement, anatomical placement, calibration, signal quality, or physiological validity. Always validate the channel map against the acquisition setup used during collection.
 
 ## Configuration profiles
 
-The GUI can save the current setup as a portable MATLAB `.mat` configuration. A configuration stores:
+The GUI can save the current setup as a portable MATLAB `.mat` configuration containing:
 
-- input/output folder settings,
-- recursive-search preference,
-- filename and folder filters,
-- EMG/ACC expected sampling rates,
-- sample-rate tolerances,
-- QC options,
-- channel map,
-- software name/version,
-- **Vinay Shankar**,
-- **vinay@tfaworld.org**,
-- **https://tfaworld.org/**,
-- configuration-generation timestamp.
+- input/output settings;
+- recursive-search preference;
+- filename and folder filters;
+- expected EMG/ACC sampling rates;
+- sample-rate tolerances;
+- QC options;
+- channel map;
+- software name/version;
+- author/contact metadata;
+- configuration timestamp.
 
-This makes the application useful for laboratories that use several acquisition layouts. Instead of rewriting MATLAB code, save one configuration per acquisition setup.
-
-Example names could be:
-
-```text
-UpperLimb_12Sensor.mat
-Walking_15Sensor.mat
-EMGOnly_8Channel.mat
-HeadACC_MuscleEMG.mat
-Pilot_74Hz_ACC.mat
-```
-
-The application itself does not depend on any of those names.
+This allows one application to support multiple acquisition layouts without rewriting MATLAB code.
 
 ## QC logic
-
-QC occurs before conversion.
 
 ### Standard QC
 
 For each HPF file, the application:
 
-1. reads every HPF stream's sampling rate,
-2. classifies each stream as `EMG`, `ACC`, or `UNEXPECTED` using configured sample rates and tolerances,
-3. builds the expected stream sequence from the channel map,
-4. compares actual stream count with expected stream count,
-5. compares observed signal type against expected type at every stream position,
+1. reads every stream's sampling rate;
+2. classifies streams as `EMG`, `ACC`, or `UNEXPECTED` using configured rates/tolerances;
+3. builds the expected stream sequence from the channel map;
+4. compares actual and expected stream counts;
+5. compares observed and expected signal types at every stream position;
 6. records a PASS/FAIL result and a stream-level audit.
 
 ### Deep QC
 
-When enabled, Deep QC additionally reads the signal arrays and checks that:
+When enabled, Deep QC additionally verifies that:
 
-- every expected stream returns samples,
-- all EMG streams have the same sample count,
-- all ACC streams have the same sample count.
-
-A PASS means the file is consistent with the **configuration you supplied**. It does not prove electrode placement, anatomical placement, calibration, signal quality, or physiological validity.
+- expected streams return samples;
+- all EMG streams have equal sample counts;
+- all ACC streams have equal sample counts.
 
 See [QC & Validation](docs/QC_AND_VALIDATION.md).
 
-## Output files
+## Outputs
 
-For a source file:
+For a source file such as:
 
 ```text
 recording.hpf
@@ -202,30 +174,7 @@ recording_ACC.txt
 recording_ConversionMetadata.txt
 ```
 
-Only the signal types present in the configured map are written.
-
-### EMG/ACC text files
-
-The first column is `Time`; subsequent columns use the configured labels. MATLAB sanitizes labels when necessary to create valid table-variable names and makes duplicates unique.
-
-### Conversion metadata
-
-The sidecar records provenance including:
-
-- software name and version,
-- **Author: Vinay Shankar**,
-- **Email: vinay@tfaworld.org**,
-- **Website: https://tfaworld.org/**,
-- conversion timestamp,
-- source HPF path,
-- configured EMG and ACC sample rates,
-- observed mean sampling rates,
-- expected stream count,
-- generated output paths.
-
-### QC reports
-
-QC reports are stored in an output `QC_Reports` folder and contain software author/contact/version fields alongside file and stream results.
+QC reports are written to an output `QC_Reports` folder. Conversion metadata records software version, author/contact, conversion time, source path, configured and observed rates, expected stream count, and generated output paths.
 
 See [Output Formats](docs/OUTPUT_FORMATS.md).
 
@@ -233,31 +182,14 @@ See [Output Formats](docs/OUTPUT_FORMATS.md).
 
 The application is designed around a conservative research-data workflow:
 
-- source `.hpf` files are opened for reading, not rewritten;
+- source `.hpf` files are read, not rewritten;
 - input and output roots must be different;
 - recursive scans exclude the configured output tree;
-- existing required outputs cause that source recording to be skipped;
+- existing required outputs cause a source recording to be skipped;
 - conversion is blocked until QC has been run for the current configuration;
 - changing the configuration invalidates previous QC.
 
-No software can substitute for a validated backup policy. Keep original HPF recordings in protected storage and test a new configuration on a small subset before batch conversion.
-
-## Common use cases
-
-This application can support, among others:
-
-1. **EMG-only acquisition** — multiple EMG sensors with no accelerometry.
-2. **ACC-only acquisition** — one or more accelerometer sensors.
-3. **EMG + ACC acquisition** — each muscle sensor has EMG plus X/Y/Z acceleration.
-4. **Mixed acquisition** — an ACC-only reference/head sensor plus EMG+ACC muscle sensors.
-5. **Mixed sensor types** — some EMG-only sensors and some EMG+ACC sensors in one file.
-6. **Large nested studies** — HPF files scattered through participant/session/task folders.
-7. **Keyword-based task selection** — include files containing one or several task terms.
-8. **Folder-based selection** — restrict processing to paths containing or excluding specific terms.
-9. **Different acquisition configurations** — save a separate `.mat` configuration for each layout.
-10. **Non-default sampling rates** — explicitly configure and QC a second acquisition protocol rather than forcing it into the default rates.
-
-Detailed walkthroughs are in [Use Cases](docs/USE_CASES.md).
+Keep original HPF recordings in protected storage and test new configurations on a small subset before batch conversion.
 
 ## Documentation
 
@@ -277,24 +209,22 @@ Detailed walkthroughs are in [Use Cases](docs/USE_CASES.md).
 
 ## Delsys notice
 
-Delsys, Trigno, EMGworks, and related names are trademarks or products of their respective owners. This project is an independent MATLAB utility authored by **Vinay Shankar** and is not presented as an official Delsys product.
+Delsys, Trigno, EMGworks, and related names are trademarks or products of their respective owners. This project is an independent MATLAB utility and is not presented as an official Delsys product.
 
-`HPF.dll` is not distributed by this repository. Users must obtain the appropriate Delsys software/library through their own installation and licensing arrangements.
+Users must obtain the appropriate Delsys software/library through their own installation and licensing arrangements.
 
 ## Citation
 
-If you use this software in academic or research work, please cite the software using [`CITATION.cff`](CITATION.cff).
+If you use this software in academic or research work, please cite it using [`CITATION.cff`](CITATION.cff).
+
+## Author
 
 **Vinay Shankar**  
 **vinay@tfaworld.org**  
 **https://tfaworld.org/**
 
-## Copyright
+## License
 
-Copyright © 2026 **Vinay Shankar**. All rights reserved.
+This project is released under the **MIT License**. See [LICENSE](LICENSE).
 
-No open-source license has been selected in this release. See [`COPYRIGHT.md`](COPYRIGHT.md).
-
----
-
-**Author:** Vinay Shankar · **Email:** vinay@tfaworld.org · **Website:** https://tfaworld.org/
+Copyright © 2026 **Vinay Shankar**. See [COPYRIGHT.md](COPYRIGHT.md) for attribution and trademark notes.
